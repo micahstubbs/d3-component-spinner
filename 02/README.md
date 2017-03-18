@@ -1,4 +1,4 @@
-an [es2015]() iteration on the block [Spinner with d3-component](https://bl.ocks.org/curran/685fa8300650c4324d571c6b0ecc55de) from [@currankelleher](https://twitter.com/currankelleher)
+an [es2015](https://babeljs.io/learn-es2015/) iteration on the block [Spinner with d3-component](https://bl.ocks.org/curran/685fa8300650c4324d571c6b0ecc55de) from [@currankelleher](https://twitter.com/currankelleher)
 
 ---
 
