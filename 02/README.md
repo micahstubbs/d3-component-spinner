@@ -1,3 +1,7 @@
+an [es2015]() iteration on the block [Spinner with d3-component](https://bl.ocks.org/curran/685fa8300650c4324d571c6b0ecc55de) from [@currankelleher](https://twitter.com/currankelleher)
+
+---
+
 This example demonstrates usage of [d3-component](https://github.com/curran/d3-component) to create a spinner component, and render it conditionally while something is loading. After loading finishes, the spinner goes away and is replaced by another component.
 
 How often have you seen a data visualization show nothing but a blank screen while the data is loading? Showing a spinner with D3 and hiding it after data is loaded is not as easy as it seems. Here's a solution for doing this, feel free to use it in your projects!
