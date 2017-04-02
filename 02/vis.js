@@ -33,7 +33,7 @@ function visualize(selection, data) {
 // This stateless component renders a static "wheel" made of circles,
 // and rotates it depending on the value of props.angle.
 const wheel = d3.component('g')
-  .create(function () {
+  .create(function (selection) {
     const minRadius = 4;
     const maxRadius = 10;
     const numDots = 10;
@@ -49,33 +49,33 @@ const wheel = d3.component('g')
     .domain([0, numDots])
     .range([0, Math.PI * 2]);
 
-    d3.select(this)
-    .selectAll('circle').data(d3.range(numDots))
-    .enter().append('circle')
-      .attr('cx', d => Math.sin(angle(d)) * wheelRadius)
-      .attr('cy', d => Math.cos(angle(d)) * wheelRadius)
-      .attr('r', radius);
+    selection
+      .selectAll('circle').data(d3.range(numDots))
+      .enter().append('circle')
+        .attr('cx', d => Math.sin(angle(d)) * wheelRadius)
+        .attr('cy', d => Math.cos(angle(d)) * wheelRadius)
+        .attr('r', radius);
   })
-  .render(function (d) {
-    d3.select(this).attr('transform', `rotate(${d})`);
+  .render(function (selection, d) {
+    selection.attr('transform', `rotate(${d})`);
   });
 
 // This component with a local timer makes the wheel spin.
 const spinner = ((() => {
   const timer = d3.local();
   return d3.component('g')
-    .create(function (d) {
-      timer.set(this, d3.timer((elapsed) => {
-        d3.select(this).call(wheel, elapsed * d.speed);
+    .create(function (selection, d) {
+      timer.set(selection.node(), d3.timer((elapsed) => {
+        selection.call(wheel, elapsed * d.speed);
       }));
     })
-    .render(function (d) {
-      d3.select(this).attr('transform', `translate(${d.x},${d.y})`);
+    .render(function (selection, d) {
+      selection.attr('transform', `translate(${d.x},${d.y})`);
     })
-    .destroy(function (d) {
-      timer.get(this).stop();
-      return d3.select(this)
-          .attr('fill-opacity', 1)
+    .destroy(function (selection, d) {
+      timer.get(selection.node()).stop();
+      return selection
+        .attr('fill-opacity', 1)
         .transition().duration(3000)
           .attr('transform', `translate(${d.x},${d.y}) scale(10)`)
           .attr('fill-opacity', 0);
@@ -84,22 +84,22 @@ const spinner = ((() => {
 
 // This component displays the visualization.
 const visualization = d3.component('g')
-  .render(function (d) {
-    d3.select(this).call(visualize, d.data);
+  .render(function (selection, d) {
+    selection.call(visualize, d.data);
   });
 
 // This component manages an svg element, and
 // either displays a spinner or text,
 // depending on the value of the `loading` state.
 const app = d3.component('g')
-  .render(function (d) {
-    d3.select(this)
-        .call(spinner, !d.loading ? [] : {
-          x: d.width / 2,
-          y: d.height / 2,
-          speed: 0.2,
-        })
-        .call(visualization, d.loading ? [] : d);
+  .render(function (selection, d) {
+    selection
+      .call(spinner, !d.loading ? [] : {
+        x: d.width / 2,
+        y: d.height / 2,
+        speed: 0.2,
+      })
+      .call(visualization, d.loading ? [] : d);
   });
 
 // Kick off the app.
